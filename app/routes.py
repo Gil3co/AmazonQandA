@@ -26,8 +26,8 @@ def get_QandA(s, url):
     s.post(url)
     tries = 0
     while not ret and tries < 5:
-        response = s.get(url)
-        print(response.text)
+        # response = s.get(url)
+        response = requests.get(url)
         soup = BeautifulSoup(response.text, PARSER)
         ret = soup.find_all("div", {"class": LAZY_LOAD_CLASS})
         tries += 1
