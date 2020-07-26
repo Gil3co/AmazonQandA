@@ -18,16 +18,23 @@ RAW_ANSWERS_CLASS = "a-fixed-left-grid-col a-col-right"
 RAW_ANSWERS_STYLE = "padding-left:0%;float:left;"
 LONG_ANSWER_CLASS = "noScriptDisplayLongText"
 
+headers = {
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding": "gzip, deflate, sdch, br",
+    "Accept-Language": "en-US,en;q=0.8",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36",
+}
 
 def get_QandA(s, url):
     ret = []
     Result = namedtuple("Result", "question answer")
-    s.headers['User-Agent'] = 'Mozilla/5.0'
+    # s.headers['User-Agent'] = 'Mozilla/5.0'
+    s.headers = headers
     s.post(url)
     tries = 0
     while not ret and tries < 5:
-        # response = s.get(url)
-        response = requests.get(url)
+        response = s.get(url)
+        # response = requests.get(url)
         soup = BeautifulSoup(response.text, PARSER)
         ret = soup.find_all("div", {"class": LAZY_LOAD_CLASS})
         tries += 1
