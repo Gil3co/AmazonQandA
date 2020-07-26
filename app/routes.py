@@ -4,6 +4,7 @@ from app.forms import QandAForm
 from bs4 import BeautifulSoup
 import requests
 from collections import namedtuple
+import time
 
 GENERIC_AMAZON_URL = "https://www.amazon.com/gp/product/{}"
 RESULT_ERROR = "A problem with the query has occurred. <br> This is the " \
@@ -38,6 +39,7 @@ def get_QandA(s, url):
         soup = BeautifulSoup(response.text, PARSER)
         ret = soup.find_all("div", {"class": LAZY_LOAD_CLASS})
         tries += 1
+        time.sleep(0.1)
     if tries == 5:
         print("tried")
         return []
