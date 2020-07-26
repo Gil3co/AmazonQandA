@@ -1,1 +1,1 @@
-web: flask run
+web: python round_forest_assignment.py
