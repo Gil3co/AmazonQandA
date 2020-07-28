@@ -18,7 +18,7 @@ RAW_ANSWERS_CLASS = "a-fixed-left-grid-col a-col-right"
 RAW_ANSWERS_STYLE = "padding-left:0%;float:left;"
 LONG_ANSWER_CLASS = "noScriptDisplayLongText"
 
-headers = {
+HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
     "Accept-Encoding": "gzip, deflate, sdch, br",
     "Accept-Language": "en-US,en;q=0.8",
@@ -28,8 +28,7 @@ headers = {
 def get_QandA(s, url):
     ret = []
     Result = namedtuple("Result", "question answer")
-    # s.headers['User-Agent'] = 'Mozilla/5.0'
-    s.headers = headers
+    s.headers = HEADERS
     s.post(url)
     tries = 0
     while not ret and tries < 5:
@@ -80,7 +79,7 @@ def query(given_asin):
 
 
 @app.route('/', methods=['GET', 'POST'])
-@app.route('/asin', methods=['GET', 'POST'])
+# @app.route('/asin', methods=['GET', 'POST'])
 def asin():
     form = QandAForm()
     if form.validate_on_submit():
