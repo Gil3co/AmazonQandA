@@ -22,11 +22,11 @@ In order to run the application, follow these steps:
 
 These are the relevant terminal/command prompt commands for steps 2-5, respectively:
 
-''' git clone https://github.com/Gil3co/AmazonQandA.git'''
+```git clone https://github.com/Gil3co/AmazonQandA.git
 
 cd AmazonQandA
 
 pip install -r requirements.txt
 
 flask run
-'''
+```
