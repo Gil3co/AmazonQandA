@@ -6,7 +6,6 @@ Examples:
 - in the following URL: https://www.amazon.com/gp/product/B08BHZ4MHF,
   B08BHZ4MHF is the product's asin.
 
-Running the application:
 In order to run the application, follow these steps:
 1. Go to the directory in which you would like to download the application.
 2. Clone the repository.
