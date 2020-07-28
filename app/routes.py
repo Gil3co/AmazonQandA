@@ -6,9 +6,12 @@ import requests
 from collections import namedtuple
 
 GENERIC_AMAZON_URL = "https://www.amazon.com/gp/product/{}"
-RESULT_ERROR = "A problem with the query has occurred. <br> This is the " \
-               "given asin: {}. If this is a correct asin, please refresh the " \
-               "page. Otherwise, go back and insert a correct asin."
+REQUEST_FAILED_MSG = "A problem with the query has occurred. <br> This is the " \
+                     "given asin: {}. <br> If this is a correct asin, please " \
+                     "refresh the page. Otherwise, go back and insert a " \
+                     "correct asin."
+NO_CONTENT_MSG = "It appears this product either has no questions or none of them " \
+                 "were answered. Please go back and try another product!"
 PARSER = "html.parser"
 LAZY_LOAD_CLASS = "cdQuestionLazySeeAll"
 RAW_RESULTS_CLASS = "a-fixed-left-grid-col a-col-right"
@@ -23,6 +26,10 @@ HEADERS = {
     "Accept-Encoding": "gzip, deflate, sdch, br",
     "Accept-Language": "en-US,en;q=0.8",
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36", }
+
+SUCCESS = 0
+REQUEST_FAILED = 1
+NO_CONTENT = 2
 
 
 def get_QandA(s, url):
@@ -50,7 +57,7 @@ def get_QandA(s, url):
         first_res = first_soup.find_all("div", {"class": LAZY_LOAD_CLASS})
         first_tries += 1
     if first_tries == 5:
-        return []
+        return [], REQUEST_FAILED
 
     next_url = first_res[0].contents[1].attrs["href"]
     next_tries = 0
@@ -62,7 +69,8 @@ def get_QandA(s, url):
                                                  "style": RAW_RESULTS_STYLE})
         next_tries += 1
     if next_tries == 5:
-        return []
+        return [], REQUEST_FAILED
+
     # at this point raw_results should contain the raw questions and answers
     results = []
     for tag in raw_results:
@@ -85,16 +93,22 @@ def get_QandA(s, url):
         else:
             answer = ans2[0].text.strip()
         results.append(Result(question=question, answer=answer))
-    return results
+    if results:
+        return results, SUCCESS
+    else:
+        return results, NO_CONTENT # there were either no questions or none
+        # of them were answered
 
 
 @app.route("/query/<given_asin>")
 def query(given_asin):
     with requests.Session() as s:
         url = GENERIC_AMAZON_URL.format(given_asin)
-        results = get_QandA(s, url)
-    if not results:
-        return RESULT_ERROR.format(given_asin)
+        results, status = get_QandA(s, url)
+    if status == REQUEST_FAILED:
+        return REQUEST_FAILED_MSG.format(given_asin)
+    if status == NO_CONTENT:
+        return NO_CONTENT_MSG
     return render_template("query_result.html", results=results,
                            asin=given_asin)
 
