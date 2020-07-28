@@ -7,7 +7,7 @@ The necessary information is the product's asin, **a 10 character long identifie
 - in the following URL: https://www.amazon.com/gp/product/B08BHZ4MHF,
   B08BHZ4MHF is the product's asin.
 
-#Running the Application
+# Running the Application
 In order to run the application, follow these steps:
 1. Go to the directory in which you would like to download the application.
 2. Clone the repository.
