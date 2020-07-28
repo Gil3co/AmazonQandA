@@ -17,11 +17,14 @@ In order to run the application, follow these steps:
 5. Run the application.
 6. Copy the URL from the last line, and paste it in a browser (works on Chrome, Firefox and Edge).
 7. Enter the desired asin in the box.
-8. Press the "Submit Query" button.
+8. Press the *Submit Query* button.
 9. Enjoy the Q&A!
 
 These are the relevant terminal/command prompt commands for steps 2-5, respectively:
 git clone https://github.com/Gil3co/AmazonQandA.git
+
 cd AmazonQandA
+
 pip install -r requirements.txt
+
 flask run
