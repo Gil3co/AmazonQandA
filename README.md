@@ -15,7 +15,7 @@ In order to run the application, follow these steps:
 3. Go to the downloaded directory.
 4. Install the required packages.
 5. Run the application.
-6. Copy the URL from the last line, and paste it in a browser (works on Chrome, Firefox and Edge).
+6. Copy the URL from the last line in the terminal (starts with "http"), and paste it in a browser (works on Chrome, Firefox and Edge).
 7. Enter the desired asin in the box.
 8. Press the *Submit Query* button.
 9. Enjoy the Q&A!
