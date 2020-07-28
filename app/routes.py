@@ -6,10 +6,12 @@ import requests
 from collections import namedtuple
 
 GENERIC_AMAZON_URL = "https://www.amazon.com/gp/product/{}"
+INVALID_ASIN_MSG = "The given asin, {}, is invalid. Please go back and " \
+                   "insert a valid asin"
 REQUEST_FAILED_MSG = "A problem with the query has occurred. <br> This is the " \
-                     "given asin: {}. <br> If this is a correct asin, please " \
+                     "given asin: {}. <br> If this is a valid asin, please " \
                      "refresh the page. Otherwise, go back and insert a " \
-                     "correct asin."
+                     "valid asin."
 NO_CONTENT_MSG = "It appears this product either has no questions or none of them " \
                  "were answered. Please go back and try another product!"
 PARSER = "html.parser"
@@ -102,6 +104,8 @@ def get_QandA(s, url):
 
 @app.route("/query/<given_asin>")
 def query(given_asin):
+    if len(given_asin) != 10:
+        return INVALID_ASIN_MSG.format(given_asin)
     with requests.Session() as s:
         url = GENERIC_AMAZON_URL.format(given_asin)
         results, status = get_QandA(s, url)
@@ -117,5 +121,5 @@ def query(given_asin):
 def asin():
     form = QandAForm()
     if form.validate_on_submit():
-        return redirect(url_for('query', given_asin=form.asin.data))
+        return redirect(url_for('query', given_asin=form.asin.data.strip()))
     return render_template('QandA.html', title="asin", form=form)
